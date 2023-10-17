@@ -48,16 +48,8 @@ public static class StudentManagement
                 // only SA user can register & register cancel class & study fee collection for student
                 endpoints.MapGet("/getSchedule/{userId}/{classId}", async (int userId, string classId, TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>
                 {
-                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
-                    if (!IsAuthor_sa)
-                    {
-                        bool IsAuthor_student = await userManipulator.IsAuthor(Role.student, context);
-                        if (IsAuthor_student)
-                        {
-                            await context.Response.WriteAsync(training.GetSchedule(userId, classId)!);
-                        }
-                    }
-                    else
+                    bool IsAuthor_sa_student = await userManipulator.IsAuthors(Role.sa, Role.student, context);
+                    if (IsAuthor_sa_student)
                     {
                         await context.Response.WriteAsync(training.GetSchedule(userId, classId)!);
                     }
@@ -78,18 +70,10 @@ public static class StudentManagement
                 });
                 endpoints.MapGet("/GetClasses/{userId}", async (int userId, TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>
                 {
-                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
-                    if (!IsAuthor_sa)
+                    bool IsAuthor_sa_student = await userManipulator.IsAuthors(Role.sa, Role.student, context);
+                    if (IsAuthor_sa_student)
                     {
-                        bool IsAuthor_student = await userManipulator.IsAuthor(Role.sa, context);
-                        if (IsAuthor_student)
-                        {
                             await context.Response.WriteAsJsonAsync(training.GetClasses_student(userId));
-                        }
-                    }
-                    else
-                    {
-                        await context.Response.WriteAsJsonAsync(training.GetClasses_student(userId));
                     }
                 });
                 endpoints.MapPost("/RegisterClassCancel", async (TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>

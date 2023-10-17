@@ -122,6 +122,29 @@ public class UserManipulator
         }
     }
 
+    public async Task<bool> IsAuthors(string role1, string role2, HttpContext context)
+    {
+        bool IsAuthor_role1 = await IsAuthor(role1, context);
+        if(!IsAuthor_role1)
+        {
+            bool IsAuthor_role2 = await IsAuthor(role2, context);
+            if(IsAuthor_role2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+
     public UserManipulator(IConfiguration root)
     {
         _idenBaseURL = root.GetSection("ApiUrl").GetSection("IdentityService").Value;
