@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TrainingManagementServices;
 using UserServices;
 
 namespace DI;
@@ -14,5 +15,6 @@ public static class WebAppBuilderExtension
             conf.UseSqlServer(connection);
         });
         builder.Services.AddScoped<UserManipulator>();
+        builder.Services.AddScoped<TrainingManipulator>();
     }
 }

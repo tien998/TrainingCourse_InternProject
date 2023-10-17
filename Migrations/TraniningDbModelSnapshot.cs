@@ -21,28 +21,10 @@ namespace TrainingCourse_InternProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClassSubject", b =>
-                {
-                    b.Property<string>("ClassesId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SubjectsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ClassesId", "SubjectsId");
-
-                    b.HasIndex("SubjectsId");
-
-                    b.ToTable("ClassSubject");
-                });
-
             modelBuilder.Entity("Model.Class", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ActualFee")
-                        .HasColumnType("int");
 
                     b.Property<int>("CourseFee")
                         .HasColumnType("int");
@@ -59,12 +41,48 @@ namespace TrainingCourse_InternProject.Migrations
                     b.Property<int>("TotalStudent")
                         .HasColumnType("int");
 
-                    b.Property<string>("TrainingCourseId")
+                    b.Property<string>("TrainingId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Class");
+                });
+
+            modelBuilder.Entity("Model.DepartmentPerTraining", b =>
+                {
+                    b.Property<string>("TrainingId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DepartmentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TrainingId", "DepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("DepartmentPerTraining");
+                });
+
+            modelBuilder.Entity("Model.Register", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClassId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ActualFee")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("Register");
                 });
 
             modelBuilder.Entity("Model.Subject", b =>
@@ -73,84 +91,145 @@ namespace TrainingCourse_InternProject.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("DepartmentId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("Subject");
                 });
 
-            modelBuilder.Entity("Model.User", b =>
+            modelBuilder.Entity("Model.SubjectDepartment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Hash_password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MajorSubject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MinorSubject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parents")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaxIdentificationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telephone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("SubjectDepartment");
                 });
 
-            modelBuilder.Entity("ClassSubject", b =>
+            modelBuilder.Entity("Model.Training", b =>
                 {
-                    b.HasOne("Model.Class", null)
-                        .WithMany()
-                        .HasForeignKey("ClassesId")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Training");
+                });
+
+            modelBuilder.Entity("Model.TrainingProcess", b =>
+                {
+                    b.Property<string>("ClassId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ClassId", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("TrainingProcess");
+                });
+
+            modelBuilder.Entity("Model.DepartmentPerTraining", b =>
+                {
+                    b.HasOne("Model.SubjectDepartment", "_subjectDepartment")
+                        .WithMany("_departmentPerTraining")
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Model.Subject", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectsId")
+                    b.HasOne("Model.Training", "_training")
+                        .WithMany("_departmentPerTraining")
+                        .HasForeignKey("TrainingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("_subjectDepartment");
+
+                    b.Navigation("_training");
+                });
+
+            modelBuilder.Entity("Model.Register", b =>
+                {
+                    b.HasOne("Model.Class", "_class")
+                        .WithMany("_register")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("_class");
+                });
+
+            modelBuilder.Entity("Model.Subject", b =>
+                {
+                    b.HasOne("Model.SubjectDepartment", "_subjectDepartment")
+                        .WithMany("_subjects")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("_subjectDepartment");
+                });
+
+            modelBuilder.Entity("Model.TrainingProcess", b =>
+                {
+                    b.HasOne("Model.Class", "_class")
+                        .WithMany("_trainingProcesses")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Model.Subject", "_subject")
+                        .WithMany("_trainingProcesses")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("_class");
+
+                    b.Navigation("_subject");
+                });
+
+            modelBuilder.Entity("Model.Class", b =>
+                {
+                    b.Navigation("_register");
+
+                    b.Navigation("_trainingProcesses");
+                });
+
+            modelBuilder.Entity("Model.Subject", b =>
+                {
+                    b.Navigation("_trainingProcesses");
+                });
+
+            modelBuilder.Entity("Model.SubjectDepartment", b =>
+                {
+                    b.Navigation("_departmentPerTraining");
+
+                    b.Navigation("_subjects");
+                });
+
+            modelBuilder.Entity("Model.Training", b =>
+                {
+                    b.Navigation("_departmentPerTraining");
                 });
 #pragma warning restore 612, 618
         }

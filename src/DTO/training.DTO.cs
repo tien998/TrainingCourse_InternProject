@@ -60,7 +60,7 @@ public static class JwtPayloadConst
     public const string aud = "aud";
 }
 
-public static class RoleConventions
+public static class Role
 {
     public const string sa = "sa";
     public const string teacher = "teacher";

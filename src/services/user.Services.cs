@@ -1,21 +1,19 @@
-using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-using TrainingCourse.DTO;
 
 namespace UserServices;
 
 public class UserManipulator
 {
-    TraniningDb _traniningDb;
     string? _idenBaseURL;
+
     /// <summary>
     /// This function call API from Identity project
     /// </summary>
     /// <typeparam name="T">UserRsDTO</typeparam>
-    /// <param name="role">Get role from "TrainingCourse.DTO.RoleConventions"</param>
+    /// <param name="role">Get role from "TrainingCourse.DTO.Role"</param>
     /// <returns></returns>
-    public async Task GetUsers(int index, int take, string role, HttpContext httpContext)
+    public async Task<string> GetUsers(int index, int take, string role, HttpContext httpContext)
     {
         string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
         using (HttpClient client = new())
@@ -27,12 +25,29 @@ public class UserManipulator
                 var rs = client.Send(requestMessage);
                 var rsJson = await rs.Content.ReadAsStringAsync();
                 httpContext.Response.StatusCode = (int)rs.StatusCode;
-                await httpContext.Response.WriteAsync(rsJson);
+                return rsJson;
             }
         }
     }
 
-    public async Task RegisterUsers(StudentRegister_DTO user, string role, HttpContext httpContext)
+    public async Task<string> Get(int id, string role, HttpContext httpContext)
+    {
+        string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
+        using (HttpClient client = new())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
+            var url = _idenBaseURL + $"/{role}/getUser/{id}";
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
+            {
+                var rs = client.Send(requestMessage);
+                var rsJson = await rs.Content.ReadAsStringAsync();
+                httpContext.Response.StatusCode = (int)rs.StatusCode;
+                return rsJson;
+            }
+        }
+    }
+
+    public async Task RegisterUsers<T>(T user, string role, HttpContext httpContext)
     {
         string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
         string jsonData = JsonConvert.SerializeObject(user);
@@ -50,33 +65,65 @@ public class UserManipulator
                     httpContext.Response.StatusCode = (int)rs.StatusCode;
                     await httpContext.Response.WriteAsync(rsJson);
                 }
-
             }
         }
     }
-    // public Task EditStudent(StudentRs_DTO student)
-    // {
 
-    // }
-
-    // public async Task<TeacherRs_DTO[]> GetTeachers(int index, int take)
-    // {
-
-    // }
-
-    // public Task EditTeacher(TeacherRs_DTO teacher)
-    // {
-
-    // }
-
-    // public Task DeleteUser(int id)
-    // {
-
-    // }
-
-    public UserManipulator(TraniningDb traniningDb, IConfiguration root)
+    public async Task EditUser<T>(T user, string role, HttpContext httpContext)
     {
-        _traniningDb = traniningDb;
+        string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
+        string jsonData = JsonConvert.SerializeObject(user);
+        using (HttpClient client = new())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
+            var url = _idenBaseURL + $"/{role}/edit";
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Post, url))
+            {
+                using (HttpContent httpContent = new StringContent(jsonData, Encoding.UTF8, "application/json"))
+                {
+                    requestMessage.Content = httpContent;
+                    var rs = client.Send(requestMessage);
+                    var rsJson = await rs.Content.ReadAsStringAsync();
+                    httpContext.Response.StatusCode = (int)rs.StatusCode;
+                    await httpContext.Response.WriteAsync(rsJson);
+                }
+            }
+        }
+    }
+
+    public async Task DeleteUser(int id, string role, HttpContext httpContext)
+    {
+        string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
+        using (HttpClient client = new())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
+            var url = _idenBaseURL + $"/{role}/delete/{id}";
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
+            {
+                var rs = await client.SendAsync(requestMessage);
+                httpContext.Response.StatusCode = (int)rs.StatusCode;
+            }
+        }
+    }
+
+    public async Task<bool> IsAuthor(string role, HttpContext context)
+    {
+        string jwtBearer = context.Request.Headers["Authorization"]!;
+        string? url = _idenBaseURL + $"/authorize/{role}";
+        using (HttpClient client = new())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
+            {
+                var rs = client.Send(requestMessage);
+                context.Response.StatusCode = (int)rs.StatusCode;
+                return Convert.ToBoolean(await rs.Content.ReadAsStringAsync());
+            }
+        }
+    }
+
+    public UserManipulator(IConfiguration root)
+    {
         _idenBaseURL = root.GetSection("ApiUrl").GetSection("IdentityService").Value;
     }
 }
