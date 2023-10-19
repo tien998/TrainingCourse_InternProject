@@ -61,7 +61,8 @@ public class Register
 // TrainingCourse.DTO.ClassScheduleDTO
 public class ClassSchedule
 {
-    public int TeacherId { get; set; }
+    // TeacherIDs is a JSON string that represent an array int[] contain teacherIDs (userId)
+    public string? TeacherIDs { get; set; }
     public string? ClassId { get; set; }
     // DaysOfWeek is a JSON String contain an int[] represent days of week
     public string? DaysOfWeek { get; set; }

@@ -36,13 +36,21 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public ClassSchedule[]? GetSchedule(int userId, string classId)
+    public ClassSchedule[]? GetSchedule(string classId)
     {
-        var studyTime = (from _register in _trainingDb!.Register
-                             where _register.UserId == userId 
-                                && _register.ClassId == classId 
-                             select _register).ToArray();;
-        return new[]{new ClassSchedule()!};
+        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule 
+                             where _classSchedule.ClassId == classId 
+                             select _classSchedule).ToArray();;
+        return studyTime;
+    }
+
+    // This function get ClassShedule that a defind teacher was assigned
+    public ClassSchedule[]? GetSchedule(string teacherId, string classId)
+    {
+        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule 
+                             where _classSchedule.ClassId == classId && _classSchedule.TeacherIDs!.Contains(teacherId)
+                             select _classSchedule).ToArray();
+        return studyTime!;
     }
 
     public void FeeCollection(Register register)

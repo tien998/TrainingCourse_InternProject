@@ -46,12 +46,12 @@ public static class StudentManagement
                 // training management area
                 // RegisterClass & RegisterClassCancel APIs has struture of http Body as AnonymusType { UserId = 0, ClassId = "" }
                 // only SA user can register & register cancel class & study fee collection for student
-                endpoints.MapGet("/getSchedule/{userId}/{classId}", async (int userId, string classId, TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>
+                endpoints.MapGet("/getSchedule/{classId}", async (string classId, TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>
                 {
                     bool IsAuthor_sa_student = await userManipulator.IsAuthors(Role.sa, Role.student, context);
                     if (IsAuthor_sa_student)
                     {
-                        await context.Response.WriteAsJsonAsync(training.GetSchedule(userId, classId)!);
+                        await context.Response.WriteAsJsonAsync(training.GetSchedule(classId)!);
                     }
                 });
 

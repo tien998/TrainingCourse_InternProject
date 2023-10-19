@@ -36,7 +36,7 @@ public class TraniningDb : DbContext
 
         modelBuilder.Entity<ClassSchedule>(entity =>
         {
-            entity.HasKey(e => new { e.TeacherId, e.ClassId });
+            entity.HasKey(e => new { e.TeacherIDs, e.ClassId });
             entity.HasOne(e => e._class).WithMany(e => e._classSchedule).HasForeignKey(e => e.ClassId);
         });
 
