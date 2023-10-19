@@ -1,6 +1,4 @@
 using Model;
-using Newtonsoft.Json;
-using TrainingCourse.DTO;
 
 namespace TrainingManagementServices;
 

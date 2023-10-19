@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Model;
-using Newtonsoft.Json;
 
 
 namespace TrainingCourse.DTO;

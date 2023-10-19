@@ -73,7 +73,7 @@ public static class StudentManagement
                     bool IsAuthor_sa_student = await userManipulator.IsAuthors(Role.sa, Role.student, context);
                     if (IsAuthor_sa_student)
                     {
-                            await context.Response.WriteAsJsonAsync(training.GetClasses_student(userId));
+                        await context.Response.WriteAsJsonAsync(training.GetClasses_student(userId));
                     }
                 });
                 endpoints.MapPost("/RegisterClassCancel", async (TrainingManipulator training, UserManipulator userManipulator, HttpContext context) =>

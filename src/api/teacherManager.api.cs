@@ -1,5 +1,6 @@
 
 using TrainingCourse.DTO;
+using TrainingManagementServices;
 using UserServices;
 
 public static class TeacherManagement
@@ -34,9 +35,15 @@ public static class TeacherManagement
                     await userManipulator.EditUser<TeacherRs_DTO>(user, Role.teacher, httpContext);
                 });
 
-                endpoints.MapGet("/delete/{userID}", async (int userID, UserManipulator userManipulator, HttpContext httpContext) =>
+                endpoints.MapDelete("/delete/{userID}", async (int userID, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
                     await userManipulator.DeleteUser(userID, Role.teacher, httpContext);
+                });
+
+
+                // training management area
+                endpoints.MapGet("/getSchedule/{userId}/{class}", (TrainingManipulator training, HttpContext context) => {
+                    // training.GetSchedule()
                 });
             });
         });

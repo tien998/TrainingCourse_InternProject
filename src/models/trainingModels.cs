@@ -35,6 +35,7 @@ public class Class
     // StudyTime will contain JSON string that represent `Training.DTO.StudyTimeDTO[]` object
     public string? StudyTime { get; set; }
     public List<Register>? _register { get; set; }
+    public List<ClassSchedule>? _classSchedule { get; set; }
     public List<TrainingProcess>? _trainingProcesses{ get; set; }
 }
 
@@ -45,6 +46,20 @@ public class Register
     public Class? _class{ get; set; }
     public int DisCount {get; set;}
     public int ActualFee {get; set;}
+}
+
+// TrainingCourse.DTO.StudyTimeDTO
+public class ClassSchedule
+{
+    public int TeacherUserId {get;set;}
+    public string? ClassId { get; set; }
+    // DaysOfWeek is a JSON String contain an int[] represent days of week
+    public string? DaysOfWeek { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public Class? _class {get;set;}
 }
 
 public class Subject

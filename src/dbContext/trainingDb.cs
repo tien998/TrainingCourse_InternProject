@@ -9,6 +9,7 @@ public class TraniningDb : DbContext
     public DbSet<DepartmentPerTraining> DepartmentPerTraining { get; set; }
 
     public DbSet<Class> Class { get; set; }
+    public DbSet<ClassSchedule> ClassSchedule { get; set; }
     public DbSet<Register> Register { get; set; }
     public DbSet<Subject> Subject { get; set; }
     public DbSet<TrainingProcess> TrainingProcess { get; set; }
@@ -25,6 +26,12 @@ public class TraniningDb : DbContext
             entity.HasOne(e => e._training).WithMany(e => e._departmentPerTraining).HasForeignKey(e => e.TrainingId);
             entity.HasOne(e => e._subjectDepartment).WithMany(e => e._departmentPerTraining).HasForeignKey(e => e.DepartmentId);
         });
+
+        modelBuilder.Entity<ClassSchedule>(entity =>
+                {
+                    entity.HasKey(e => new { e.TeacherUserId, e.ClassId });
+                    entity.HasOne(e => e._class).WithMany(e => e._classSchedule).HasForeignKey(e => e.ClassId);
+                });
 
         modelBuilder.Entity<Register>(entity =>
         {
