@@ -66,9 +66,9 @@ public static class Role
     public const string student = "student";
 }
 
-public class StudyTimeDTO
+public class ClassScheduleDTO
 {
-    public int[]? TeacherId { get; set; }
+    public string? TeacherId { get; set; }
     public int[]? DaysOfWeek { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
@@ -85,4 +85,11 @@ public enum DaysOfWeek
     Friday = 6,
     Saturday = 7,
     Sunday = 0,
+}
+
+public enum ClassStatus
+{
+    InEnrollment = 1,
+    InProcess = 2,
+    Done = 3
 }

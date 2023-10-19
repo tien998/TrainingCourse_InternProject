@@ -1,4 +1,5 @@
 using Model;
+using TrainingCourse.DTO;
 
 namespace TrainingManagementServices;
 
@@ -35,13 +36,13 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public string? GetSchedule(int userId, string classId)
+    public ClassSchedule[]? GetSchedule(int userId, string classId)
     {
-        string? studyTime = (from _register in _trainingDb!.Register
-                             join _class in _trainingDb.Class
-                             on _register.ClassId equals _class.Id
-                             select _class.StudyTime).FirstOrDefault();
-        return studyTime!;
+        var studyTime = (from _register in _trainingDb!.Register
+                             where _register.UserId == userId 
+                                && _register.ClassId == classId 
+                             select _register).ToArray();;
+        return new[]{new ClassSchedule()!};
     }
 
     public void FeeCollection(Register register)

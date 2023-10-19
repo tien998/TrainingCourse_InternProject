@@ -51,7 +51,7 @@ public static class StudentManagement
                     bool IsAuthor_sa_student = await userManipulator.IsAuthors(Role.sa, Role.student, context);
                     if (IsAuthor_sa_student)
                     {
-                        await context.Response.WriteAsync(training.GetSchedule(userId, classId)!);
+                        await context.Response.WriteAsJsonAsync(training.GetSchedule(userId, classId)!);
                     }
                 });
 
