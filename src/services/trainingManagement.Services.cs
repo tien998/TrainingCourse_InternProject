@@ -53,6 +53,32 @@ public class TrainingManipulator
         return studyTime!;
     }
 
+    public Subject_DTO[] GetSubject_DTOs()
+    {
+        Subject[] subjects = (from _subject in _trainingDb!.Subject
+                                    select _subject).ToArray();
+        var dtoArr = new Subject_DTO[subjects.Length];
+        for (int i = 0; i < subjects.Length; i++)
+        {
+            dtoArr[i] = new Subject_DTO(subjects[i]);
+        }
+        return dtoArr;
+    }
+
+    public Class_DTO[] GetClass_DTOs()
+    {
+        Class[] classes = (from _class in _trainingDb!.Class
+                                    select _class).ToArray();
+        var dtoArr = new Class_DTO[classes.Length];
+        for (int i = 0; i < classes.Length; i++)
+        {
+            dtoArr[i] = new Class_DTO(classes[i]);
+        }
+        return dtoArr;
+    }
+
+    public Teacher;
+    
     public void FeeCollection(Register register)
     {
         var fee = (from _register in _trainingDb!.Register

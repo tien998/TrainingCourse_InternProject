@@ -41,6 +41,7 @@ public class Class
     public string? Note { get; set; }
     // Convention in TrainingCourse.DTO.ClassStatus
     public int Status { get; set; }
+    public string? ClassRoom { get; set; }
     public string? CourseId { get; set; }
     public string? TrainingYearId { get; set; }
     public Course? _course { get; set; }
