@@ -17,7 +17,8 @@ public static class StudentManagement
                 // 'index' to Pagination, 'take' is number of item that need to take
                 endpoints.MapGet("/getAll/{index}/{take}", async (int index, int take, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
-                    await userManipulator.GetUsers(index, take, Role.student, httpContext);
+                    string? rsJson = await userManipulator.GetUsers(index, take, Role.student, httpContext);
+                    await httpContext.Response.WriteAsync(rsJson);
                 });
 
                 endpoints.MapGet("/getUser/{id}", async (int id, UserManipulator userManipulator, HttpContext httpContext) =>

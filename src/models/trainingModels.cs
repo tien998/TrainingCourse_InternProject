@@ -59,9 +59,10 @@ public class Register
     public int ActualFee { get; set; }
 }
 
-// TrainingCourse.DTO.ClassScheduleDTO
+// ClassSchedule is also TeachingAssignment
 public class ClassSchedule
 {
+    public int Id { get; set; }
     // TeacherIDs is a JSON string that represent an array int[] contain teacherIDs (userId)
     public string? TeacherIDs { get; set; }
     public string? ClassId { get; set; }

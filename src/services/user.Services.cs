@@ -1,5 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
+using TrainingCourse.DTO;
 
 namespace UserServices;
 
@@ -140,6 +141,22 @@ public class UserManipulator
         else
         {
             return true;
+        }
+    }
+
+    // This function is not recommend to use. The Client should consider call api direct from the Identity_Service_Project for quickly performence
+    // api: http://localhost:5024/teacher/GetAll/dropdown
+    public async Task<string> GetTeachers_DropdownDTO(HttpContext context)
+    {
+        string url = _idenBaseURL! + $"/{Role.teacher}/GetAll/dropdown";
+        using (HttpClient client = new())
+        {
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
+            {
+                var rs = await client.SendAsync(requestMessage);
+                string? rsJson = await rs.Content.ReadAsStringAsync();
+                return rsJson;
+            }
         }
     }
 

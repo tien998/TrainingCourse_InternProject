@@ -1,5 +1,4 @@
 using Model;
-using Newtonsoft.Json;
 using TrainingCourse.DTO;
 
 namespace TrainingManagementServices;
@@ -7,7 +6,6 @@ namespace TrainingManagementServices;
 public class TrainingManipulator
 {
     TraniningDb? _trainingDb;
-    string? _idenBaseURL;
 
     public void RegisterClass_student(int userId, string classId)
     {
@@ -38,31 +36,41 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public ClassSchedule[]? GetSchedule(string classId)
+    public ClassSchedule_DTO[]? GetSchedule(string classId)
     {
-        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule 
-                             where _classSchedule.ClassId == classId 
-                             select _classSchedule).ToArray();;
-        return studyTime;
+        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule
+                         where _classSchedule.ClassId == classId
+                         select _classSchedule).ToArray();
+        ClassSchedule_DTO[] schedule_DTOs = new ClassSchedule_DTO[studyTime.Length];
+        for (int i = 0; i < studyTime.Length; i++)
+        {
+            schedule_DTOs[i] = new ClassSchedule_DTO(studyTime[i]);
+        }
+        return schedule_DTOs!;
     }
 
     // This function get ClassShedule that a defind teacher was assigned
-    public ClassSchedule[]? GetSchedule(string teacherId, string classId)
+    public ClassSchedule_DTO[]? GetSchedule(string teacherId, string classId)
     {
-        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule 
-                             where _classSchedule.ClassId == classId && _classSchedule.TeacherIDs!.Contains(teacherId)
-                             select _classSchedule).ToArray();
-        return studyTime!;
+        var studyTime = (from _classSchedule in _trainingDb!.ClassSchedule
+                         where _classSchedule.ClassId == classId && _classSchedule.TeacherIDs!.Contains(teacherId)
+                         select _classSchedule).ToArray();
+        ClassSchedule_DTO[] schedule_DTOs = new ClassSchedule_DTO[studyTime.Length];
+        for (int i = 0; i < studyTime.Length; i++)
+        {
+            schedule_DTOs[i] = new ClassSchedule_DTO(studyTime[i]);
+        }
+        return schedule_DTOs!;
     }
 
-    public Subject_DTO[] GetSubject_DTOs()
+    public SubjectDropdown_DTO[] GetSubject_DTOs()
     {
         Subject[] subjects = (from _subject in _trainingDb!.Subject
-                                    select _subject).ToArray();
-        var dtoArr = new Subject_DTO[subjects.Length];
+                              select _subject).ToArray();
+        var dtoArr = new SubjectDropdown_DTO[subjects.Length];
         for (int i = 0; i < subjects.Length; i++)
         {
-            dtoArr[i] = new Subject_DTO(subjects[i]);
+            dtoArr[i] = new SubjectDropdown_DTO(subjects[i]);
         }
         return dtoArr;
     }
@@ -70,7 +78,7 @@ public class TrainingManipulator
     public ClassDropdown_DTO[] GetClass_DTOs()
     {
         Class[] classes = (from _class in _trainingDb!.Class
-                                    select _class).ToArray();
+                           select _class).ToArray();
         var dtoArr = new ClassDropdown_DTO[classes.Length];
         for (int i = 0; i < classes.Length; i++)
         {
@@ -79,27 +87,34 @@ public class TrainingManipulator
         return dtoArr;
     }
 
-    // This function is not recommend to use. The Client should consider call api direct from the Identity_Service_Project for quickly performence
-    public async Task<TeacherDropdown_DTO[]> GetTeacher_DTO()
+    // ClassSchedule_DTO is also TeachingAssignment
+    public void AssignTeacher(ClassSchedule_DTO dto)
     {
-        string url = _idenBaseURL! + $"/{Role.teacher}/GetAll";
-        using (HttpClient client = new())
-        {
-            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
-            {
-                var rs = await client.SendAsync(requestMessage);
-                string? rsJson = await rs.Content.ReadAsStringAsync();
-                TeacherRs_DTO[] rs_DTO_Arr = JsonConvert.DeserializeObject<TeacherRs_DTO[]>(rsJson)!;
-                var dtoArr = new TeacherDropdown_DTO[rs_DTO_Arr.Length];
-                for (int i = 0; i < rs_DTO_Arr.Length; i++)
-                {
-                    dtoArr[i] = new TeacherDropdown_DTO(rs_DTO_Arr[i]);
-                }
-                return dtoArr;
-            }
-        }
+        ClassSchedule? classSchedule = new();
+        DTO_Transaction.ToClassSchedule(dto, classSchedule);
+        _trainingDb!.ClassSchedule.Add(classSchedule);
+        _trainingDb.SaveChanges();
     }
-    
+
+    // ClassSchedule_DTO is also TeachingAssignment
+    public void ReAssignTeacher(ClassSchedule_DTO dto)
+    {
+        var classSchedule = (from _schedule in _trainingDb!.ClassSchedule
+                             where _schedule.TeacherIDs == dto.TeacherIDs && _schedule.ClassId == dto.ClassId
+                             select _schedule).FirstOrDefault();
+        DTO_Transaction.ToClassSchedule(dto, classSchedule!);
+        _trainingDb.SaveChanges();
+    }
+
+    public void DeleteSchedule(string teacherIDs, string classId)
+    {
+        var classSchedule = (from _schedule in _trainingDb!.ClassSchedule
+                             where _schedule.TeacherIDs == teacherIDs && _schedule.ClassId == classId
+                             select _schedule).FirstOrDefault();
+        _trainingDb.ClassSchedule.Remove(classSchedule!);
+        _trainingDb.SaveChanges();
+    }
+
     public void FeeCollection(Register register)
     {
         var fee = (from _register in _trainingDb!.Register
@@ -109,9 +124,8 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public TrainingManipulator(TraniningDb traniningDb, IConfiguration root)
+    public TrainingManipulator(TraniningDb traniningDb)
     {
         _trainingDb = traniningDb;
-        _idenBaseURL = root.GetSection("ApiUrl").GetSection("IdentityService").Value;
     }
 }

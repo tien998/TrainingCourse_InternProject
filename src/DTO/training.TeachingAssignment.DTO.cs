@@ -3,7 +3,7 @@ using Model;
 namespace TrainingCourse.DTO;
 
 // Equal to Model.ClassSchedule
-public class TeachingAssignment_DTO
+public class ClassSchedule_DTO
 {
     public string? TeacherIDs { get; set; }
     public string? ClassId { get; set; }
@@ -12,14 +12,25 @@ public class TeachingAssignment_DTO
     public TimeSpan EndTime { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    public ClassSchedule_DTO() { }
+    public ClassSchedule_DTO(ClassSchedule schedule)
+    {
+        TeacherIDs = schedule.TeacherIDs;
+        ClassId = schedule.ClassId;
+        DaysOfWeek = schedule.DaysOfWeek;
+        StartTime = schedule.StartTime;
+        EndTime = schedule.EndTime;
+        StartDate = schedule.StartDate;
+        EndDate = schedule.EndDate;
+    }
 }
 
-public class Subject_DTO
+public class SubjectDropdown_DTO
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
-    public Subject_DTO() { }
-    public Subject_DTO(Subject subject)
+    public SubjectDropdown_DTO() { }
+    public SubjectDropdown_DTO(Subject subject)
     {
         Id = subject.Id;
         Name = subject.Name;
@@ -40,13 +51,7 @@ public class ClassDropdown_DTO
 
 public class TeacherDropdown_DTO
 {
-    public string? Id { get; set; }
+    public int Id { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public TeacherDropdown_DTO(TeacherRs_DTO teacherRs_DTO)
-    {
-        Id = teacherRs_DTO.Id;
-        FirstName = teacherRs_DTO.FirstName;
-        LastName = teacherRs_DTO.LastName;
-    }
 }
