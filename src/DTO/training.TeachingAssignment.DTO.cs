@@ -26,14 +26,27 @@ public class Subject_DTO
     }
 }
 
-public class Class_DTO
+public class ClassDropdown_DTO
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
-    public Class_DTO() { }
-    public Class_DTO(Class cls)
+    public ClassDropdown_DTO() { }
+    public ClassDropdown_DTO(Class cls)
     {
         Id = cls.Id;
         Name = cls.Id;
+    }
+}
+
+public class TeacherDropdown_DTO
+{
+    public string? Id { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public TeacherDropdown_DTO(TeacherRs_DTO teacherRs_DTO)
+    {
+        Id = teacherRs_DTO.Id;
+        FirstName = teacherRs_DTO.FirstName;
+        LastName = teacherRs_DTO.LastName;
     }
 }
