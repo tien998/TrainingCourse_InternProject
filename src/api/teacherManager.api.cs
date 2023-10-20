@@ -42,8 +42,41 @@ public static class TeacherManagement
 
 
                 // training management area
-                endpoints.MapGet("/getSchedule/{userId}/{class}", (TrainingManipulator training, HttpContext context) => {
-                    // training.GetSchedule()
+                endpoints.MapGet("/getSchedule/{teacherIDs}/{classId}", async (string teacherIDs, string classId, UserManipulator userManipulator, TrainingManipulator training, HttpContext context) =>
+                {
+                    bool IsAuthor_sa_teacher = await userManipulator.IsAuthors(Role.sa, Role.teacher, context);
+                    if (IsAuthor_sa_teacher)
+                    {
+                        training.GetSchedule(teacherIDs, classId);
+                    }
+                });
+
+                // After have defind values, Use this APIs to Assign teacher to class
+                endpoints.MapPost("/AssignTeacher", async (ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                {
+                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
+                    if (IsAuthor_sa)
+                    {
+                        trainingManipulator.AssignTeacher(dto);
+                    }
+                });
+
+                endpoints.MapPut("/ReassignTeacher", async (ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                {
+                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
+                    if (IsAuthor_sa)
+                    {
+                        trainingManipulator.ReAssignTeacher(dto);
+                    }
+                });
+
+                endpoints.MapDelete("/DeleteSchedule/{teacherIDs}/{classId}", async (string teacherIDs, string classId, ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                {
+                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
+                    if (IsAuthor_sa)
+                    {
+                        trainingManipulator.DeleteSchedule(teacherIDs, classId);
+                    }
                 });
             });
         });

@@ -39,30 +39,7 @@ public static class TrainingManagement
                     await context.Response.WriteAsync(subject_DTOs);
                 });
 
-                // After have defind values, Use this APIs to Assign teacher to class
-                endpoint.MapPost("/AssignTeacher", async (TeachingAssignment_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) => {
-                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
-                    if (IsAuthor_sa)
-                    {
-                       trainingManipulator.AssignTeacher(dto);
-                    }
-                });
-
-                endpoint.MapPut("/ReassignTeacher", async (TeachingAssignment_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) => {
-                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
-                    if (IsAuthor_sa)
-                    {
-                       trainingManipulator.ReAssignTeacher(dto);
-                    }
-                });
-
-                endpoint.MapDelete("/DeleteSchedule/{teacherIDs}/{classId}", async (string teacherIDs, string classId, TeachingAssignment_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) => {
-                    bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
-                    if (IsAuthor_sa)
-                    {
-                       trainingManipulator.DeleteSchedule(teacherIDs, classId);
-                    }
-                });
+                
             });
         });
     }
