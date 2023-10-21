@@ -1,5 +1,5 @@
 namespace Model;
-public class TrainingYear
+public class TrainingCourse
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
@@ -19,7 +19,7 @@ public class SubjectDepartment
 public class DepartmentPerTrainingYear
 {
     public string? TrainingYearId { get; set; }
-    public TrainingYear? _trainingYear { get; set; }
+    public TrainingCourse? _trainingYear { get; set; }
     public string? DepartmentId { get; set; }
     public SubjectDepartment? _subjectDepartment { get; set; }
 }
@@ -29,7 +29,6 @@ public class Course
     public string? Id { get; set; }
     public string? Name { get; set; }
     public string? TrainingYearId { get; set; }
-    public int CourseFee { get; set; }
     public List<CourseSubject>? _courseSubject { get; set; }
     public List<Class>? _class { get; set; }
 }
@@ -37,13 +36,15 @@ public class Course
 public class Class
 {
     public string? Id { get; set; }
+    public string? Name { get; set; }
     public int TotalStudent { get; set; }
     public string? Note { get; set; }
     // Convention in TrainingCourse.DTO.ClassStatus
     public int Status { get; set; }
     public string? ClassRoom { get; set; }
+    public int ClassFee { get; set; }
     public string? CourseId { get; set; }
-    public string? TrainingYearId { get; set; }
+    public string? TrainingCourseId { get; set; }
     public Course? _course { get; set; }
     public List<Register>? _register { get; set; }
     public List<ClassSchedule>? _classSchedule { get; set; }

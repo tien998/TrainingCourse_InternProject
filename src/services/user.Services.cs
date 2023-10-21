@@ -1,6 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
-using TrainingCourse.DTO;
+using TrainingCourseManagement.DTO;
 
 namespace UserServices;
 
@@ -21,6 +21,23 @@ public class UserManipulator
         {
             client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
             var url = _idenBaseURL + $"/{role}/Getall/{index}/{take}";
+            using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
+            {
+                var rs = client.Send(requestMessage);
+                var rsJson = await rs.Content.ReadAsStringAsync();
+                httpContext.Response.StatusCode = (int)rs.StatusCode;
+                return rsJson;
+            }
+        }
+    }
+
+    public async Task<string> GetUsers(string idArr, string role, HttpContext httpContext)
+    {
+        string jwtBearer = httpContext.Request.Headers["Authorization"].ToString();
+        using (HttpClient client = new())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", jwtBearer);
+            var url = _idenBaseURL + $"/{role}/GetMany/{idArr}";
             using (HttpRequestMessage requestMessage = new(HttpMethod.Get, url))
             {
                 var rs = client.Send(requestMessage);

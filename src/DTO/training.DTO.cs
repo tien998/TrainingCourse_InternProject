@@ -2,12 +2,20 @@ using System.Security.Claims;
 using Model;
 
 
-namespace TrainingCourse.DTO;
+namespace TrainingCourseManagement.DTO;
 
 public class User_AuthenDTO
 {
     public string? UserName { get; set; }
     public string? Password { get; set; }
+}
+
+public class UserInfo
+{
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? Telephone { get; set; }
+    public int Status { get; set; }
 }
 
 public class StudentRegister_DTO : UserBaseDTO, IStudentUser

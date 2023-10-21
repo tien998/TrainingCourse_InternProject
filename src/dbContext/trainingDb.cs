@@ -4,7 +4,7 @@ using Model;
 public class TraniningDb : DbContext
 {
     public TraniningDb(DbContextOptions<TraniningDb> options) : base(options) { }
-    public DbSet<TrainingYear> TrainingYear { get; set; }
+    public DbSet<TrainingCourse> TrainingCourse { get; set; }
     public DbSet<SubjectDepartment> SubjectDepartment { get; set; }
     public DbSet<DepartmentPerTrainingYear> DepartmentPerTrainingYear { get; set; }
 
@@ -17,7 +17,7 @@ public class TraniningDb : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TrainingYear>().HasKey(e => e.Id);
+        modelBuilder.Entity<TrainingCourse>().HasKey(e => e.Id);
         modelBuilder.Entity<SubjectDepartment>().HasKey(e => e.Id);
         modelBuilder.Entity<Course>().HasKey(e => e.Id);
 
@@ -59,8 +59,5 @@ public class TraniningDb : DbContext
             entity.HasOne(e => e._course).WithMany(e => e._courseSubject).HasForeignKey(e => e.CourseId);
             entity.HasOne(e => e._subject).WithMany(e => e._courseSubject).HasForeignKey(e => e.SubjectId);
         });
-
-
-
     }
 }

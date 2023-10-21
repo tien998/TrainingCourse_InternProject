@@ -1,4 +1,4 @@
-using TrainingCourse.DTO;
+using TrainingCourseManagement.DTO;
 using TrainingManagementServices;
 using UserServices;
 

@@ -1,6 +1,6 @@
 using Model;
 
-namespace TrainingCourse.DTO;
+namespace TrainingCourseManagement.DTO;
 
 // Equal to Model.ClassSchedule
 public class ClassSchedule_DTO
