@@ -277,7 +277,7 @@ public class TrainingManipulator
         return subjectArr;
     }
 
-    public ClassSubject GetClassSubjects(string classId)
+    public ClassSubjectDTO GetClassSubjects(string classId)
     {
         string? courseId = (from clasS in _trainingDb!.Class
                             where clasS.Id == classId
@@ -285,7 +285,7 @@ public class TrainingManipulator
         string[] subjectIdArr = (from classSubject in _trainingDb!.CourseSubject
                                where classSubject.CourseId == courseId
                                select classSubject.SubjectId).ToArray();
-        return new ClassSubject(classId, subjectIdArr);
+        return new ClassSubjectDTO(classId, subjectIdArr);
     }
 
     public TrainingManipulator(TraniningDb traniningDb)

@@ -32,16 +32,6 @@ public static class TrainingManagement
                     }
                 });
 
-                endpoint.MapGet("/GetClassSubjects/{classId}", async (string classId, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
-                {
-                    bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
-                    if (IsAuthor)
-                    {
-                        ClassSubject? classSubject = trainingManipulator.GetClassSubjects(classId);
-                        await context.Response.WriteAsJsonAsync(classSubject);
-                    }
-                });
-
                 // This API is not recommend to use. The Client should consider call api direct from the Identity_Service_Project for quickly performence
                 // api: http://localhost:5024/teacher/GetAll/dropdown
                 endpoint.MapGet("/GetTeachers", async (UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
@@ -50,10 +40,20 @@ public static class TrainingManagement
                     await context.Response.WriteAsync(subject_DTOs);
                 });
 
-                
+                //
+                endpoint.MapGet("/GetClassSubjects/{classId}", async (string classId, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                                {
+                                    bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
+                                    if (IsAuthor)
+                                    {
+                                        ClassSubjectDTO? classSubject = trainingManipulator.GetClassSubjects(classId);
+                                        await context.Response.WriteAsJsonAsync(classSubject);
+                                    }
+                                });
             });
         });
 
+        // ________________________________________________________________________________________________
         // TrainingCourse APIs
         app.Map("/trainingCourse", (app) =>
         {
@@ -69,7 +69,7 @@ public static class TrainingManagement
                         await context.Response.WriteAsJsonAsync(trc);
                     }
                 });
-                endpoints.MapPost("/addNew", async (TrainingCourseDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPost("/addNew", async (TrainingCourseDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -77,7 +77,7 @@ public static class TrainingManagement
                         trainingManipulator.AddTrainingCourse(dto);
                     }
                 });
-                endpoints.MapPut("/edit", async (TrainingCourseDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPut("/edit", async (TrainingCourseDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -85,7 +85,7 @@ public static class TrainingManagement
                         trainingManipulator.EditTrainingCourse(dto);
                     }
                 });
-                endpoints.MapDelete("/delete/{id}", async (string id,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapDelete("/delete/{id}", async (string id, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -96,6 +96,7 @@ public static class TrainingManagement
             });
         });
 
+        // ________________________________________________________________________________________________
         // Subject APIs
         app.Map("/subject", (app) =>
         {
@@ -111,7 +112,7 @@ public static class TrainingManagement
                         await context.Response.WriteAsJsonAsync(subjectArr);
                     }
                 });
-                endpoints.MapPost("/addNew", async (SubjectDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPost("/addNew", async (SubjectDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -119,7 +120,7 @@ public static class TrainingManagement
                         trainingManipulator.AddSubject(dto);
                     }
                 });
-                endpoints.MapPut("/edit", async (SubjectDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPut("/edit", async (SubjectDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -127,7 +128,7 @@ public static class TrainingManagement
                         trainingManipulator.EditSubject(dto);
                     }
                 });
-                endpoints.MapDelete("/delete/{id}", async (string id,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapDelete("/delete/{id}", async (string id, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -138,6 +139,7 @@ public static class TrainingManagement
             });
         });
 
+        // ________________________________________________________________________________________________
         // SubjectDepartment APIs
         app.Map("/subjectDepartment", (app) =>
         {
@@ -153,7 +155,7 @@ public static class TrainingManagement
                         await context.Response.WriteAsJsonAsync(departmentArr);
                     }
                 });
-                endpoints.MapPost("/addNew", async (SubjectDepartmentDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPost("/addNew", async (SubjectDepartmentDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -161,7 +163,7 @@ public static class TrainingManagement
                         trainingManipulator.AddSubjectDepartment(dto);
                     }
                 });
-                endpoints.MapPut("/edit", async (SubjectDepartmentDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPut("/edit", async (SubjectDepartmentDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -169,7 +171,7 @@ public static class TrainingManagement
                         trainingManipulator.EditSubjectDepartment(dto);
                     }
                 });
-                endpoints.MapDelete("/delete/{id}", async (string id,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapDelete("/delete/{id}", async (string id, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -180,6 +182,7 @@ public static class TrainingManagement
             });
         });
 
+        // ________________________________________________________________________________________________
         // Classes APIs
         app.Map("/Class", (app) =>
         {
@@ -195,7 +198,7 @@ public static class TrainingManagement
                         await context.Response.WriteAsJsonAsync(classArr);
                     }
                 });
-                endpoints.MapPost("/addNew", async (AddClassDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPost("/addNew", async (AddClassDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -203,7 +206,7 @@ public static class TrainingManagement
                         trainingManipulator.AddClass(dto);
                     }
                 });
-                endpoints.MapPut("/edit", async (AddClassDTO dto,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPut("/edit", async (AddClassDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
@@ -211,7 +214,7 @@ public static class TrainingManagement
                         trainingManipulator.EditClass(dto);
                     }
                 });
-                endpoints.MapDelete("/delete/{id}", async (string id,UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapDelete("/delete/{id}", async (string id, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)

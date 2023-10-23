@@ -26,11 +26,11 @@ public class AddClassDTO
     public string? Img { get; set; }
 }
 
-public class ClassSubject
+public class ClassSubjectDTO
 {
     public string? ClassId { get; set; }
     public string[]? SubjectIdArr { get; set; }
-    public ClassSubject(string id, string[] subjectIdArr)
+    public ClassSubjectDTO(string id, string[] subjectIdArr)
     {
         ClassId = id;
         SubjectIdArr = subjectIdArr;
