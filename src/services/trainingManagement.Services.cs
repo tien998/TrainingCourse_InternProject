@@ -107,6 +107,40 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
+    // TrainingCourse 
+    public TrainingCourseDTO[]? GetTrainingCourse(int index, int take)
+    {
+        var trainingCourse = (from tc in _trainingDb!.TrainingCourse
+                              select new TrainingCourseDTO(tc)).ToArray();
+        return trainingCourse;
+    }
+
+    public void AddTrainingCourse(TrainingCourseDTO dto)
+    {
+        TrainingCourse trainingCourse = new();
+        DTO_Transaction.ToTrainingCourse(dto, trainingCourse);
+        _trainingDb!.TrainingCourse.Add(trainingCourse);
+        _trainingDb.SaveChanges();
+    }
+
+    public void EditTrainingCourse(TrainingCourseDTO dto)
+    {
+        TrainingCourse? trainingCourse = (from tc in _trainingDb!.TrainingCourse
+                                        where tc.Id == dto.Id
+                                        select tc).FirstOrDefault();
+        DTO_Transaction.ToTrainingCourse(dto, trainingCourse!);
+        _trainingDb.SaveChanges();
+    }
+
+    public void DeleteTrainingCourse(string id)
+    {
+        TrainingCourse? trainingCourse = (from tc in _trainingDb!.TrainingCourse
+                                        where tc.Id == id
+                                        select tc).FirstOrDefault();
+        _trainingDb.Remove(trainingCourse!);
+        _trainingDb.SaveChanges();
+    }
+
     // Subject
     public SubjectDTO[] GetSubjects()
     {
@@ -225,22 +259,33 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public async Task<string> GetStudents_byClass(string classId, UserManipulator userManipulator, HttpContext context)
+    public async Task<string> GetStudents_inClass(string classId, UserManipulator userManipulator, HttpContext context)
     {
         var stIdArr = (from register_ in _trainingDb!.Register
-                        where register_.ClassId == classId
-                        select new string(register_.ClassId)).ToArray();
+                       where register_.ClassId == classId
+                       select new string(register_.ClassId)).ToArray();
         string? idArrString = JsonConvert.SerializeObject(stIdArr);
         return await userManipulator.GetUsers(idArrString, Role.student, context);
     }
 
-    public SubjectDTO[] GetSubject_byClass(string id)
+    public SubjectDTO[] GetSubject_inClass(string id)
     {
         var subjectArr = (from couresrSubject in _trainingDb!.CourseSubject
-                            join clasS in _trainingDb.Class on couresrSubject.CourseId equals clasS.Id
-                            join subject in _trainingDb.Subject on couresrSubject.SubjectId equals subject.Id
-                            select new SubjectDTO(subject)).ToArray();
+                          join clasS in _trainingDb.Class on couresrSubject.CourseId equals clasS.Id
+                          join subject in _trainingDb.Subject on couresrSubject.SubjectId equals subject.Id
+                          select new SubjectDTO(subject)).ToArray();
         return subjectArr;
+    }
+
+    public ClassSubject GetClassSubjects(string classId)
+    {
+        string? courseId = (from clasS in _trainingDb!.Class
+                            where clasS.Id == classId
+                            select clasS.CourseId).FirstOrDefault();
+        string[] subjectIdArr = (from classSubject in _trainingDb!.CourseSubject
+                               where classSubject.CourseId == courseId
+                               select classSubject.SubjectId).ToArray();
+        return new ClassSubject(classId, subjectIdArr);
     }
 
     public TrainingManipulator(TraniningDb traniningDb)

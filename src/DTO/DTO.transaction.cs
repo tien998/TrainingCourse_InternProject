@@ -40,4 +40,12 @@ public static class DTO_Transaction
         class_.CourseId = dto.CourseId;
         class_.TrainingCourseId = dto.TrainingCourseId;
     }
+    
+    public static void ToTrainingCourse(TrainingCourseDTO dto, TrainingCourse trainingCourse)
+    {
+        trainingCourse.Id = dto.Id;
+        trainingCourse.Name = dto.Name;
+        trainingCourse.StartDate = dto.StartDate;
+        trainingCourse.EndDate = dto.EndDate;
+    }
 }

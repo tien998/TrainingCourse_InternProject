@@ -25,3 +25,14 @@ public class AddClassDTO
     public string? TrainingCourseId { get; set; }
     public string? Img { get; set; }
 }
+
+public class ClassSubject
+{
+    public string? ClassId { get; set; }
+    public string[]? SubjectIdArr { get; set; }
+    public ClassSubject(string id, string[] subjectIdArr)
+    {
+        ClassId = id;
+        SubjectIdArr = subjectIdArr;
+    }
+}
