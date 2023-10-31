@@ -25,14 +25,14 @@ public static class TeacherManagement
                     await httpContext.Response.WriteAsync(rsJson!);
                 });
 
-                endpoints.MapPost("/register", async (TeacherRegister_DTO user, UserManipulator userManipulator, HttpContext httpContext) =>
+                endpoints.MapPost("/register", async (TeacherRegisterDTO user, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
-                    await userManipulator.RegisterUsers<TeacherRegister_DTO>(user, Role.teacher, httpContext);
+                    await userManipulator.RegisterUsers<TeacherRegisterDTO>(user, Role.teacher, httpContext);
                 });
 
-                endpoints.MapPost("/edit", async (TeacherRs_DTO user, UserManipulator userManipulator, HttpContext httpContext) =>
+                endpoints.MapPost("/edit", async (TeacherRsDTO user, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
-                    await userManipulator.EditUser<TeacherRs_DTO>(user, Role.teacher, httpContext);
+                    await userManipulator.EditUser<TeacherRsDTO>(user, Role.teacher, httpContext);
                 });
 
                 endpoints.MapDelete("/delete/{userID}", async (int userID, UserManipulator userManipulator, HttpContext httpContext) =>
@@ -52,7 +52,7 @@ public static class TeacherManagement
                 });
 
                 // After have defind values, Use this APIs to Assign teacher to class
-                endpoints.MapPost("/AssignTeacher", async (ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPost("/AssignTeacher", async (ClassScheduleDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor_sa)
@@ -61,7 +61,7 @@ public static class TeacherManagement
                     }
                 });
 
-                endpoints.MapPut("/ReassignTeacher", async (ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapPut("/ReassignTeacher", async (ClassScheduleDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor_sa)
@@ -70,7 +70,7 @@ public static class TeacherManagement
                     }
                 });
 
-                endpoints.MapDelete("/DeleteSchedule/{teacherIDs}/{classId}", async (string teacherIDs, string classId, ClassSchedule_DTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
+                endpoints.MapDelete("/DeleteSchedule/{teacherIDs}/{classId}", async (string teacherIDs, string classId, ClassScheduleDTO dto, UserManipulator userManipulator, TrainingManipulator trainingManipulator, HttpContext context) =>
                 {
                     bool IsAuthor_sa = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor_sa)

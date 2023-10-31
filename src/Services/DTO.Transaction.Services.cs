@@ -5,8 +5,8 @@ namespace TrainingCourseManagement.dTO;
 
 public static class DTO_Transaction
 {
-    // ClassSchedule_DTO is also TeachingAssignment
-    public static void ToClassSchedule(ClassSchedule_DTO dto, ClassSchedule classSchedule)
+    // ClassScheduleDTO is also TeachingAssignment
+    public static void ToClassSchedule(ClassScheduleDTO dto, ClassSchedule classSchedule)
     {
         classSchedule.TeacherIDs = dto.TeacherIDs;
         classSchedule.ClassId = dto.ClassId;

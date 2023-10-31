@@ -18,7 +18,7 @@ public static class TrainingManagement
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
                     {
-                        SubjectDropdown_DTO[]? subject_DTOs = trainingManipulator.GetSubject_DTOs();
+                        SubjectDropdownDTO[]? subject_DTOs = trainingManipulator.GetSubject_DTOs();
                         await context.Response.WriteAsJsonAsync(subject_DTOs);
                     }
                 });
@@ -27,7 +27,7 @@ public static class TrainingManagement
                     bool IsAuthor = await userManipulator.IsAuthor(Role.sa, context);
                     if (IsAuthor)
                     {
-                        ClassDropdown_DTO[]? class_DTOs = trainingManipulator.GetClass_DTOs();
+                        ClassDropdownDTO[]? class_DTOs = trainingManipulator.GetClass_DTOs();
                         await context.Response.WriteAsJsonAsync(class_DTOs);
                     }
                 });

@@ -27,14 +27,14 @@ public static class StudentManagement
                 });
 
 
-                endpoints.MapPost("/register", async (StudentRegister_DTO user, UserManipulator userManipulator, HttpContext httpContext) =>
+                endpoints.MapPost("/register", async (StudentRegisterDTO user, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
-                    await userManipulator.RegisterUsers<StudentRegister_DTO>(user, Role.student, httpContext);
+                    await userManipulator.RegisterUsers<StudentRegisterDTO>(user, Role.student, httpContext);
                 });
 
-                endpoints.MapPost("/edit", async (StudentRs_DTO user, UserManipulator userManipulator, HttpContext httpContext) =>
+                endpoints.MapPost("/edit", async (StudentRsDTO user, UserManipulator userManipulator, HttpContext httpContext) =>
                 {
-                    await userManipulator.EditUser<StudentRs_DTO>(user, Role.student, httpContext);
+                    await userManipulator.EditUser<StudentRsDTO>(user, Role.student, httpContext);
                 });
 
                 endpoints.MapDelete("/delete/{userID}", async (int userID, UserManipulator userManipulator, HttpContext httpContext) =>

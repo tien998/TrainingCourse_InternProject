@@ -39,39 +39,39 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    public ClassSchedule_DTO[]? GetSchedule(string classId)
+    public ClassScheduleDTO[]? GetSchedule(string classId)
     {
         var schedule_DTOs = (from _classSchedule in _trainingDb!.ClassSchedule
                              where _classSchedule.ClassId == classId
-                             select new ClassSchedule_DTO(_classSchedule)).ToArray();
+                             select new ClassScheduleDTO(_classSchedule)).ToArray();
         return schedule_DTOs!;
     }
 
     // This function get ClassShedule that a defind teacher was assigned
-    public ClassSchedule_DTO[]? GetSchedule(string teacherId, string classId)
+    public ClassScheduleDTO[]? GetSchedule(string teacherId, string classId)
     {
         var schedule_DTOs = (from _classSchedule in _trainingDb!.ClassSchedule
                              where _classSchedule.ClassId == classId && _classSchedule.TeacherIDs!.Contains(teacherId)
-                             select new ClassSchedule_DTO(_classSchedule)).ToArray();
+                             select new ClassScheduleDTO(_classSchedule)).ToArray();
         return schedule_DTOs!;
     }
 
-    public SubjectDropdown_DTO[] GetSubject_DTOs()
+    public SubjectDropdownDTO[] GetSubject_DTOs()
     {
-        SubjectDropdown_DTO[] subjectDropdown = (from _subject in _trainingDb!.Subject
-                                                 select new SubjectDropdown_DTO(_subject)).ToArray();
+        SubjectDropdownDTO[] subjectDropdown = (from _subject in _trainingDb!.Subject
+                                                 select new SubjectDropdownDTO(_subject)).ToArray();
         return subjectDropdown;
     }
 
-    public ClassDropdown_DTO[] GetClass_DTOs()
+    public ClassDropdownDTO[] GetClass_DTOs()
     {
-        ClassDropdown_DTO[] classDropdown = (from _class in _trainingDb!.Class
-                                             select new ClassDropdown_DTO(_class)).ToArray();
+        ClassDropdownDTO[] classDropdown = (from _class in _trainingDb!.Class
+                                             select new ClassDropdownDTO(_class)).ToArray();
         return classDropdown;
     }
 
-    // ClassSchedule_DTO is also TeachingAssignment
-    public void AssignTeacher(ClassSchedule_DTO dto)
+    // ClassScheduleDTO is also TeachingAssignment
+    public void AssignTeacher(ClassScheduleDTO dto)
     {
         ClassSchedule? classSchedule = new();
         DTO_Transaction.ToClassSchedule(dto, classSchedule);
@@ -79,8 +79,8 @@ public class TrainingManipulator
         _trainingDb.SaveChanges();
     }
 
-    // ClassSchedule_DTO is also TeachingAssignment
-    public void ReAssignTeacher(ClassSchedule_DTO dto)
+    // ClassScheduleDTO is also TeachingAssignment
+    public void ReAssignTeacher(ClassScheduleDTO dto)
     {
         var classSchedule = (from _schedule in _trainingDb!.ClassSchedule
                              where _schedule.TeacherIDs == dto.TeacherIDs && _schedule.ClassId == dto.ClassId
